@@ -4,6 +4,8 @@ from .structure_detector import (
     detect_section
 )
 
+from .cleaner import is_noise
+
 
 def build_structure(paragraphs):
 
@@ -16,6 +18,10 @@ def build_structure(paragraphs):
     for paragraph in paragraphs:
 
         text = paragraph["text"]
+
+        # Ignore document artifacts/noise
+        if is_noise(text):
+            continue
 
         # Check if paragraph is a unit
         if detect_unit(text):
