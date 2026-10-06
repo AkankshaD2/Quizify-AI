@@ -34,7 +34,7 @@ for query in queries:
     print("Content:", chunk["content"])
 
     question = generate_question(
-        chunk["content"]
+        chunk
     )
 
     print("\n===== GENERATED QUIZ =====")
