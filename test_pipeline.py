@@ -1,11 +1,12 @@
 from document_processing.vector_store import load_embeddings
 from document_processing.retriever import search_chunks
-from quiz_generation.question_generator import generate_question
+from quiz_generation.quiz_service import generate_quiz
 
 
 # Load embeddings
 chunks = load_embeddings("embeddings.pkl")
 
+retrieved_chunks = []
 
 queries = [
     "Which protocol is designed for long-range communication with low power consumption?",
@@ -28,18 +29,22 @@ for query in queries:
 
     chunk = results[0]
 
-    print("\nRetrieved Chunk:")
-    print("Topic:", chunk["topic"])
-    print("Section:", chunk["section"])
-    print("Content:", chunk["content"])
+    retrieved_chunks.append(chunk)
 
-    question = generate_question(
-        chunk
-    )
 
-    print("\n===== GENERATED QUIZ =====")
+print("\n" + "=" * 60)
+print("GENERATING QUIZ FROM RETRIEVED CHUNKS")
+print("=" * 60)
 
-    print("\nQuestion:")
+
+questions = generate_quiz(
+    retrieved_chunks
+)
+
+
+for i, question in enumerate(questions, start=1):
+
+    print(f"\nQuestion {i}:")
     print(question.question)
 
     print("\nOptions:")
@@ -48,8 +53,6 @@ for query in queries:
     print("C:", question.options.C)
     print("D:", question.options.D)
 
-    print("\nCorrect Answer:", question.correct_answer)
-
+    print("Correct Answer:", question.correct_answer)
     print("Explanation:", question.explanation)
-
     print("Difficulty:", question.difficulty)

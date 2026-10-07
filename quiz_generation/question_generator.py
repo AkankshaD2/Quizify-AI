@@ -484,7 +484,12 @@ the supplied definition.
 
 32. Do NOT add extra benefits, purposes, applications,
 capabilities, or real-world claims.
-
+EXPLANATION RULE:
+Do NOT include the option letter (A, B, C, or D) in the explanation.
+Mention the correct answer text directly.
+For example:
+Correct: "Wide Area Coverage is explicitly listed as a feature of LoRaWAN."
+Incorrect: "D: Wide Area Coverage is explicitly listed as a feature of LoRaWAN."
 ============================================================
 DIFFICULTY
 ============================================================
@@ -707,18 +712,6 @@ def generate_question(chunk):
     # --------------------------------------------------------
     # GROUNDING VALIDATION
     # --------------------------------------------------------
-
-    print(
-        "\n================================"
-    )
-
-    print(
-        "      QUIZ VALIDATION START"
-    )
-
-    print(
-        "================================"
-    )
 
     is_valid = validate_question(
         quiz_question,

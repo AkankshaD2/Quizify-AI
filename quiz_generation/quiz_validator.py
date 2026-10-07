@@ -138,11 +138,6 @@ def validate_numeric_grounding(question, chunk):
     )
 
     if not numbers:
-
-        print(
-            "Numeric/quantity grounding: PASSED"
-        )
-
         return True
 
     for number in numbers:
@@ -157,15 +152,7 @@ def validate_numeric_grounding(question, chunk):
                 number
             )
 
-            print(
-                "Numeric/quantity grounding: FAILED"
-            )
-
             return False
-
-    print(
-        "Numeric/quantity grounding: PASSED"
-    )
 
     return True
 
@@ -654,7 +641,99 @@ with the supplied definition.
 
 Do NOT change the relationship represented by the
 Section.
+IMPORTANT SECTION AUTHORITY RULE:
 
+If the supplied section is "Features", every fact listed in the supplied content should be treated as a feature of the topic.
+
+If the supplied section is "Advantages", every fact listed in the supplied content should be treated as an advantage.
+
+If the supplied section is "Limitations", every fact listed in the supplied content should be treated as a limitation.
+
+If the supplied section is "Definition", use the supplied definition as authoritative.
+
+Do NOT reject a question merely because multiple answer options are also valid facts from the supplied section. A multiple-choice question may contain several source-supported options as distractors, while exactly one is designated as the correct answer.
+IMPORTANT CORRECT-ANSWER RULE:
+
+The correct answer is SUPPOSED to be a fact supported by the supplied source.
+
+If the question asks:
+"Which of the following is listed as a feature of LoRaWAN?"
+
+and the source lists:
+"Secure Communication"
+
+then an option containing "Secure Communication" is a VALID correct answer.
+
+Do NOT reject a question because the correct answer is also a fact listed in the source.
+
+Being a source-supported fact is exactly what makes the option a valid answer.
+
+The phrase "correct answer" refers to the answer selected for the question. It does NOT mean that the source should describe the answer as "the answer."
+
+For example:
+
+Source:
+Long Range
+Very Low Power
+Low Data Rate
+Wide Area Coverage
+Secure Communication
+High Scalability
+
+Question:
+Which of the following is listed as a feature of LoRaWAN?
+
+Correct answer:
+Secure Communication
+
+This is VALID because Secure Communication appears in the supplied Features section.
+
+Never treat the relationship:
+"Secure Communication is a feature"
+as a contradiction merely because "Secure Communication" is marked as the correct answer.
+IMPORTANT SECTION SEMANTICS:
+
+The section metadata is authoritative.
+
+If Section = "Features", then EVERY item listed in the supplied content is a feature of the topic, even if the word "feature" does not appear before each item.
+
+For example:
+
+Topic: LoRaWAN
+Section: Features
+
+Content:
+Long Range
+Very Low Power
+Low Data Rate
+Wide Area Coverage
+Secure Communication
+High Scalability
+
+This means all six items are features of LoRaWAN.
+
+Therefore:
+
+"Low Data Rate" = feature
+"Wide Area Coverage" = feature
+"Secure Communication" = feature
+"High Scalability" = feature
+
+Do NOT require the source text to repeat the word "feature" beside every individual item.
+
+The section heading "Features" applies to all items in that section.
+
+The same rule applies to other sections:
+
+If Section = "Advantages", every listed item is an advantage.
+
+If Section = "Limitations", every listed item is a limitation.
+
+If Section = "Definition", the supplied content is the authoritative definition.
+
+A question is NOT invalid merely because the source lists multiple valid facts that can appear as answer options. Those facts may be used as distractors.
+
+For example, if all four options are listed under a Features section and one is marked as the correct answer, the question can still be valid because the question asks which option is the designated answer, not whether the other options are false facts.
 ============================================================
 MULTIPLE-CHOICE RULE
 ============================================================
@@ -849,14 +928,20 @@ exactly one of the two valid labels.
 
     result_upper = result.upper()
 
-    valid_match = re.search(
+    valid_match = re.findall(
         r"\bVALID:\s*(YES|NO)\b",
         result_upper
     )
 
+    if not valid_match:
+        print("Could not parse LLM validation result.")
+        return False
+
+    validation_result = valid_match[-1]
+
     if valid_match:
 
-        decision = valid_match.group(1)
+        decision = valid_match[-1]
 
         if decision == "YES":
 
