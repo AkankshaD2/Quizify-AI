@@ -83,3 +83,57 @@ def get_all_questions():
     connection.close()
 
     return rows
+
+
+def get_question_by_id(question_id):
+    """Retrieve one question using its ID."""
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT * FROM questions
+        WHERE id = ?
+    """, (question_id,))
+
+    question = cursor.fetchone()
+
+    connection.close()
+
+    return question
+
+
+def get_questions_by_difficulty(difficulty):
+    """Retrieve questions matching a difficulty level."""
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT * FROM questions
+        WHERE difficulty = ?
+        ORDER BY id
+    """, (difficulty,))
+
+    questions = cursor.fetchall()
+
+    connection.close()
+
+    return questions
+
+
+def get_question_count():
+    """Return the total number of saved questions."""
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT COUNT(*) FROM questions
+    """)
+
+    count = cursor.fetchone()[0]
+
+    connection.close()
+
+    return count
