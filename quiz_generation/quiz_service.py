@@ -1,13 +1,15 @@
+
 from quiz_generation.question_generator import generate_question
+from database.db_manager import create_tables, save_question
 
 
 def generate_quiz(chunks, max_retries=3):
     """
-    Generate one validated quiz question from each chunk.
-
-    If a generated question fails validation,
-    retry up to max_retries times.
+    Generate validated quiz questions,
+    save them to SQLite, and return them.
     """
+
+    create_tables()
 
     questions = []
 
@@ -17,28 +19,25 @@ def generate_quiz(chunks, max_retries=3):
 
             try:
 
-                question = generate_question(
-                    chunk
+                question = generate_question(chunk)
+
+                # Save the validated question to SQLite
+                question_id = save_question(question)
+
+                print(
+                    f"Question saved with ID: {question_id}"
                 )
 
-                questions.append(
-                    question
-                )
+                questions.append(question)
 
                 break
 
             except ValueError as error:
 
-                print(
-                    f"\nAttempt {attempt} failed:"
-                )
-
-                print(
-                    error
-                )
+                print(f"\nAttempt {attempt} failed:")
+                print(error)
 
                 if attempt == max_retries:
-
                     raise ValueError(
                         "Failed to generate a valid "
                         "question after "

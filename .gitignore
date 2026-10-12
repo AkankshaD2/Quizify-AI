@@ -16,3 +16,5 @@ __pycache__/
 .DS_Store
 Thumbs.db
 embeddings.pkl
+# Local SQLite database
+database/*.db
