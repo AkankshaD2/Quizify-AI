@@ -18,3 +18,13 @@ Thumbs.db
 embeddings.pkl
 # Local SQLite database
 database/*.db
+# Uploaded study documents
+uploads/*
+!uploads/.gitkeep
+
+# Temporary files
+*.tmp
+# Test documents
+test_documents/*
+# Nested duplicate repository
+Quizify-AI/

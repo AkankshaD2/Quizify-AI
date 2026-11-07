@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizify AI - Quiz History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h1>Quiz History</h1>
+    <p>Track your previous quiz attempts and performance.</p>
+
+    {% if attempts %}
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Document</th>
+                    <th>Total Questions</th>
+                    <th>Correct Answers</th>
+                    <th>Score</th>
+                    <th>Attempted At</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for attempt in attempts %}
+                    <tr>
+                        <td>{{ attempt.filename }}</td>
+                        <td>{{ attempt.total_questions }}</td>
+                        <td>{{ attempt.correct_answers }}</td>
+                        <td>{{ attempt.score }}%</td>
+                        <td>{{ attempt.attempted_at }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    {% else %}
+
+        <p>No quiz attempts found. Complete your first quiz to see your history!</p>
+
+    {% endif %}
+
+    <br>
+
+    <a href="{{ url_for('home') }}">
+        <button type="button">Back to Home</button>
+    </a>
+
+</body>
+</html>

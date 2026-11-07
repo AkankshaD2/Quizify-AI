@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizify AI - Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h1>Quiz Results</h1>
+
+    <div class="result-card">
+
+        <h2>Your Score</h2>
+
+        <h1>{{ result.percentage }}%</h1>
+
+        <p>
+            Correct Answers: {{ result.correct }}
+            out of {{ result.total }}
+        </p>
+
+        <p>Incorrect Answers: {{ result.total - result.correct }}</p>
+
+        {% if result.percentage >= 80 %}
+            <h3>Excellent work!</h3>
+        {% elif result.percentage >= 50 %}
+            <h3>Good effort! Keep practising.</h3>
+        {% else %}
+            <h3>Keep learning. You can improve!</h3>
+        {% endif %}
+
+        <a href="{{ url_for('home') }}">
+            <hr>
+
+<h2>Question-wise Review</h2>
+
+{% for item in review %}
+
+    <div class="question-card">
+
+        <h3>Question {{ loop.index }}: {{ item.question }}</h3>
+
+        {% for letter, option in item.options.items() %}
+
+            <p>
+                {{ letter }}. {{ option }}
+
+                {% if letter == item.correct_answer %}
+                    <strong>✓ Correct Answer</strong>
+
+                {% elif letter == item.user_answer %}
+                    <strong>✗ Your Answer</strong>
+                {% endif %}
+            </p>
+
+        {% endfor %}
+
+        {% if item.is_correct %}
+            <p>✓ You answered correctly!</p>
+        {% else %}
+            <p>✗ Your answer was incorrect.</p>
+        {% endif %}
+
+        <p>
+            <strong>Explanation:</strong>
+            {{ item.explanation }}
+        </p>
+
+    </div>
+
+{% endfor %}
+            <button type="button">Generate Another Quiz</button>
+        </a>
+
+    </div>
+
+</body>
+</html>

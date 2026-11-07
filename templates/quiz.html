@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizify AI - Attempt Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h1>Your Generated Quiz</h1>
+    <p>Read each question carefully and select one answer.</p>
+
+    <form action="{{ url_for('submit_quiz') }}" method="POST">
+
+        {% for question in questions %}
+            {% set question_index = loop.index0 %}
+            <div class="question-card">
+
+                <h3>
+                    Question {{ loop.index }}: {{ question.question }}
+                </h3>
+
+                {% for letter, option in question.options.model_dump().items() %}
+                    <label>
+                        <input
+                            type="radio"
+                            name="answer_{{ question_index }}"
+                            value="{{ letter }}"
+                        >
+                        {{ letter }}. {{ option }}
+                    </label>
+                    <br>
+                {% endfor %}
+
+            </div>
+        {% endfor %}
+
+        <button type="submit">Submit Quiz</button>
+
+    </form>
+
+</body>
+</html>
