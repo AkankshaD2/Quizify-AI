@@ -132,49 +132,6 @@ Quizify-AI operates as a full Retrieval-Augmented Generation (RAG) pipeline:
                                   - Factual grounding check
 ```
 
----
-
-## Project Folder Structure
-
-```text
-Quizify-AI/
-â”œâ”€â”€ app.py                      # Main Flask application and route controllers
-â”œâ”€â”€ database/                   # SQLite database access and persistence
-â”‚   â”œâ”€â”€ __init__.py
-â”‚   â”œâ”€â”€ db_manager.py           # Database connection, schemas, and queries
-â”‚   â””â”€â”€ quizify.db              # SQLite database file
-â”œâ”€â”€ document_processing/        # Ingestion, structuring, and vector search
-â”‚   â”œâ”€â”€ __init__.py
-â”‚   â”œâ”€â”€ chunker.py              # Semantic and structured chunk creation
-â”‚   â”œâ”€â”€ cleaner.py              # Text normalization and whitespace cleanup
-â”‚   â”œâ”€â”€ docx_reader.py          # Word document paragraph extraction
-â”‚   â”œâ”€â”€ embedding_generator.py  # 384-dimensional vector embedding generator
-â”‚   â”œâ”€â”€ retriever.py            # Hybrid semantic, keyword, and phrase retriever
-â”‚   â”œâ”€â”€ structure_builder.py    # Document hierarchy and section modeling
-â”‚   â”œâ”€â”€ structure_detector.py   # Unit, topic, and section pattern detection
-â”‚   â””â”€â”€ vector_store.py         # In-memory vector store and cosine similarity
-â”œâ”€â”€ quiz_generation/            # LLM prompt engineering, schemas, and validation
-â”‚   â”œâ”€â”€ __init__.py
-â”‚   â”œâ”€â”€ question_generator.py   # Ollama Llama 3.2 MCQ generation pipeline
-â”‚   â”œâ”€â”€ quiz_schema.py          # Pydantic schemas for questions and validation
-â”‚   â”œâ”€â”€ quiz_service.py         # Multi-question generation coordinator
-â”‚   â””â”€â”€ quiz_validator.py       # Deterministic and grounding verification
-â”œâ”€â”€ quiz_scoring/               # Quiz answer evaluation and scoring
-â”‚   â”œâ”€â”€ __init__.py
-â”‚   â”œâ”€â”€ answer_checker.py       # Compares submitted answers against answer key
-â”‚   â”œâ”€â”€ score_calculator.py     # Calculates correct/incorrect counts and percentages
-â”‚   â””â”€â”€ scoring_service.py      # Evaluates quiz attempt submissions
-â”œâ”€â”€ static/                     # Static assets
-â”‚   â””â”€â”€ style.css               # Modern EdTech SaaS CSS design system
-â”œâ”€â”€ templates/                  # Jinja2 HTML templates
-â”‚   â”œâ”€â”€ dashboard.html          # Performance analytics and attempt charts
-â”‚   â”œâ”€â”€ history.html            # Quiz attempt history log
-â”‚   â”œâ”€â”€ index.html              # Homepage and DOCX upload studio
-â”‚   â”œâ”€â”€ quiz.html               # Quiz taking interface
-â”‚   â””â”€â”€ result.html             # Quiz score and question review
-â”œâ”€â”€ uploads/                    # Storage directory for uploaded DOCX documents
-â””â”€â”€ README.md                   # Project documentation
-```
 
 ---
 
