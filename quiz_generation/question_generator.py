@@ -198,6 +198,44 @@ from supplied study notes.
 Your question MUST be completely grounded in the
 supplied study notes.
 
+QUESTION WRITING AND GRAMMAR RULES
+============================================================
+
+1. Every question MUST be grammatically correct,
+   natural, and easy to understand.
+
+2. Write the question as a complete, natural sentence.
+
+3. Never combine incompatible sentence structures.
+
+4. Do not copy source sentences mechanically if doing
+   so creates incorrect grammar.
+
+5. Preserve the original meaning while improving
+   sentence structure.
+
+6. Before generating the JSON response, silently
+   read the question aloud and correct any grammatical
+   errors.
+
+7. Prefer simple, direct question formats.
+
+Examples:
+
+Incorrect:
+What problem do traditional games generally use
+fixed enemy movement and fixed difficulty have?
+
+Correct:
+What problem can arise in traditional 2D games
+with fixed enemy movement and fixed difficulty?
+
+Incorrect:
+What is the length of IPv6 addresses have?
+
+Correct:
+What is the length of an IPv6 address?
+
 ============================================================
 SOURCE CONTEXT
 ============================================================
@@ -293,24 +331,55 @@ Which feature of LoRaWAN is described as Secure Communication?
 BAD:
 What is LoRaWAN known for regarding Secure Communication?
 
-12. The supplied Section is AUTHORITATIVE.
+12. When the supplied study notes contain a general
+    problem, concept, or central idea followed by
+    supporting examples:
 
-13. If Section is "Features":
+    - Prefer the general problem or central idea
+      when asking about the main problem or overall
+      purpose.
+    - Do NOT mistake a supporting example for the
+      complete central idea.
+    - Use supporting examples only when the question
+      explicitly asks about an example or specific
+      detail.
+    - The correct answer must be directly supported
+      by the source text.
+    - Do not invent a broader interpretation.
+
+    Example:
+
+    Source:
+    Traditional games may not respond according to
+    how a player actually plays. A player may become
+    stuck because the game does not provide useful
+    guidance.
+
+    Question:
+    What problem do traditional games have?
+
+    Correct answer:
+    They may not respond according to how a player
+    actually plays.
+
+13. The supplied Section is AUTHORITATIVE.
+
+14. If Section is "Features":
     The question MUST refer to source facts as
     features. Never call them advantages or limitations.
 
-14. If Section is "Advantages":
+15. If Section is "Advantages":
     The question MUST refer to source facts as
     advantages. Never call them features or limitations.
 
-15. If Section is "Limitations":
+16. If Section is "Limitations":
     The question MUST refer to source facts as
     limitations. Never call them features or advantages.
 
-16. If Section is "Definition":
+17. If Section is "Definition":
     Stay directly consistent with the supplied definition.
 
-17. NEVER change the relationship represented by the
+18. NEVER change the relationship represented by the
     Section.
 
 For example:
@@ -448,6 +517,25 @@ D
       correct option.
     - The explanation refers to the actual correct
       option.
+
+34. DISTRACTOR GENERATION STRATEGY:
+
+    - First identify the exact concept tested by the
+      question.
+    - Create three different, plausible but incorrect
+      answers related to that concept.
+    - Each distractor must represent a different
+      misunderstanding or alternative interpretation.
+    - Do NOT repeat the same source example using
+      different wording.
+    - Do NOT copy one supporting example into multiple
+      options.
+    - If the source is too short to support three
+      distinct distractors, use simple conceptual
+      alternatives without presenting them as facts
+      from the source.
+    - Never sacrifice option uniqueness just to fill
+      all four options.
 
 ============================================================
 ============================================================

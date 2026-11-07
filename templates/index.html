@@ -3,54 +3,516 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quizify-AI | Smart Learning</title>
+    <title>Quizify-AI | Smart Learning Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='style.css') }}"
     />
   </head>
-  <body>
-    <nav class="navbar">
-      <a href="/" class="logo">Quizify<span>-AI</span></a>
-      <a href="#features" class="nav-link">Features</a>
-    </nav>
 
-    <main class="hero">
-      <div class="tag">YOUR PERSONAL AI STUDY PARTNER</div>
+  <body class="homepage">
+    <!-- Header / Navbar -->
+    <header class="header-wrapper">
+      <nav class="navbar">
+        <a href="/" class="logo">
+          <div class="logo-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          Quizify<span>-AI</span>
+        </a>
 
-      <h1>
-        Turn your notes into<br />
-        <span>smart quizzes.</span>
-      </h1>
+        <!-- Desktop Navigation Links -->
+        <ul class="nav-links" id="nav-links">
+          <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+          <li><a href="#features" class="nav-link">Features</a></li>
+          <li><a href="/history" class="nav-link">History</a></li>
+          <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
+        </ul>
 
-      <p class="description">
-        Upload your study material, generate personalized quizzes, and discover
-        a smarter way to prepare for exams.
-      </p>
+        <!-- Action Buttons -->
+        <div class="nav-actions">
+          <a href="/history" class="nav-button-ghost">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            Quiz History
+          </a>
+          <a href="/dashboard" class="nav-button-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+            Dashboard
+          </a>
+          <button class="mobile-menu-toggle" id="mobile-toggle" aria-label="Toggle navigation">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </nav>
+    </header>
 
-      <a href="#features" class="primary-button">Explore Quizify →</a>
+    <!-- Hero Section -->
+    <section class="hero-wrapper">
+      <div class="hero">
+        <div class="tag-badge">
+          <span class="tag-pulse"></span>
+          AI-POWERED STUDY PARTNER
+        </div>
 
-      <section id="features" class="features">
-        <article class="feature-card">
-          <div class="icon">📚</div>
-          <h3>Upload Your Notes</h3>
-          <p>Study from your own PDF and Word documents.</p>
-        </article>
+        <h1>
+          Turn your notes into<br />
+          <span>smart quizzes.</span>
+        </h1>
 
-        <article class="feature-card">
-          <div class="icon">🧠</div>
-          <h3>AI-Generated Quizzes</h3>
-          <p>Practice questions based on your learning material.</p>
-        </article>
+        <p class="description">
+          Upload your study notes, generate personalized quizzes, and discover
+          a smarter way to prepare for exams.
+        </p>
 
-        <article class="feature-card">
-          <div class="icon">📈</div>
-          <h3>Track Your Progress</h3>
-          <p>Review your scores and understand your performance.</p>
-        </article>
-      </section>
-    </main>
+        <div class="hero-badges">
+          <span class="hero-pill">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            DOCX Notes Support
+          </span>
+          <span class="hero-pill">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            Semantic RAG Analysis
+          </span>
+          <span class="hero-pill">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            Instant Score Review
+          </span>
+        </div>
 
-    <footer>Made for smarter learning · Quizify-AI</footer>
+        <!-- Generator / Upload Section -->
+        <div class="upload-container" id="generator">
+          <section class="upload-section">
+            <div class="upload-header">
+              <h2>Generate Your Quiz</h2>
+              <p>Upload your study notes and let AI create questions for you.</p>
+            </div>
+
+            <!-- Flash Error Messages -->
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <div class="flash-container">
+                  {% for message in messages %}
+                    <div class="flash-message">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                      </svg>
+                      <span>{{ message }}</span>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
+
+            <form
+              id="quiz-upload-form"
+              action="{{ url_for('upload_file') }}"
+              method="POST"
+              enctype="multipart/form-data"
+            >
+              <!-- File Upload Dropzone -->
+              <div class="form-group">
+                <label for="file" class="form-label">
+                  <span>Choose your DOCX notes</span>
+                  <span class="form-label-hint">Supported format: .docx</span>
+                </label>
+
+                <div class="dropzone" id="dropzone">
+                  <input
+                    type="file"
+                    id="file"
+                    name="file"
+                    accept=".docx"
+                    required
+                  />
+                  <div class="dropzone-content" id="dropzone-content">
+                    <div class="dropzone-icon">
+                      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                      </svg>
+                    </div>
+                    <div class="dropzone-text">
+                      Drag & drop your file here, or <span>browse files</span>
+                    </div>
+                    <div class="dropzone-subtext">
+                      Supports Word documents (.docx) up to 10MB
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Selected File Preview -->
+                <div class="file-preview" id="file-preview">
+                  <div class="file-info">
+                    <div class="file-badge-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                      </svg>
+                    </div>
+                    <div class="file-details">
+                      <span class="file-name" id="file-name">filename.docx</span>
+                      <span class="file-size" id="file-size">0 KB</span>
+                    </div>
+                  </div>
+                  <button type="button" class="file-remove-btn" id="file-remove-btn">Change</button>
+                </div>
+              </div>
+
+              <!-- Question Count Selector -->
+              <div class="form-group">
+                <label for="question_count" class="form-label">
+                  <span>Number of questions</span>
+                  <span class="form-label-hint">Select quiz depth</span>
+                </label>
+
+                <!-- Visual Segmented Grid -->
+                <div class="question-options-grid">
+                  <div class="question-option-card" data-value="5">
+                    <span class="question-count-num">5 Questions</span>
+                    <span class="question-count-tag">Quick Practice</span>
+                  </div>
+                  <div class="question-option-card selected" data-value="10">
+                    <span class="question-count-num">10 Questions</span>
+                    <span class="question-count-tag">Standard (Default)</span>
+                  </div>
+                  <div class="question-option-card" data-value="15">
+                    <span class="question-count-num">15 Questions</span>
+                    <span class="question-count-tag">Deep Assessment</span>
+                  </div>
+                </div>
+
+                <!-- Preserved Native Select (Synced with Cards) -->
+                <select id="question_count" name="question_count" class="native-select">
+                  <option value="5">5 Questions</option>
+                  <option value="10" selected>10 Questions</option>
+                  <option value="15">15 Questions</option>
+                </select>
+              </div>
+
+              <!-- Submit Button -->
+              <button type="submit" class="primary-button" id="submit-button">
+                <span class="btn-spinner"></span>
+                <span class="btn-text-default">
+                  Upload Notes & Generate Quiz
+                </span>
+                <svg class="btn-icon-default" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+                <span class="btn-text-loading" style="display: none;">
+                  Analyzing Notes & Generating Quiz...
+                </span>
+              </button>
+
+              <p class="form-disclaimer">
+                Your notes are securely processed to construct tailored practice questions.
+              </p>
+            </form>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="section-wrapper">
+      <div class="section-header">
+        <div class="section-tag">Simple 3-Step Process</div>
+        <h2>How Quizify-AI Works</h2>
+        <p>From your lecture notes to an interactive self-test in seconds.</p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">01</div>
+          <div class="step-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="12" y1="18" x2="12" y2="12"></line>
+              <line x1="9" y1="15" x2="15" y2="15"></line>
+            </svg>
+          </div>
+          <h3>Upload Notes</h3>
+          <p>Provide your Word document (.docx). The system reads your content preserving section headers and logical flow.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">02</div>
+          <div class="step-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+          </div>
+          <h3>Semantic Analysis</h3>
+          <p>Text is split into semantic chunks, and relevant context is evaluated to formulate grounded multiple-choice questions.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">03</div>
+          <div class="step-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <h3>Test & Master</h3>
+          <p>Attempt questions, get immediate scoring with question-by-question explanations, and track your progress over time.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+      <div class="features-container">
+        <div class="section-header">
+          <div class="section-tag">Core Capabilities</div>
+          <h2>Everything You Need for Exam Readiness</h2>
+          <p>Designed to help you retain information faster through active recall.</p>
+        </div>
+
+        <div class="features">
+          <article class="feature-card">
+            <div class="feature-icon-box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+              </svg>
+            </div>
+            <h3>Upload Your Notes</h3>
+            <p>Study directly from your own Word documents without needing to reformat or copy-paste text.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon-box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+            </div>
+            <h3>AI-Generated Quizzes</h3>
+            <p>Practice realistic multiple-choice questions synthesized from your key subject topics.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon-box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                <polyline points="17 6 23 6 23 12"></polyline>
+              </svg>
+            </div>
+            <h3>Track Your Progress</h3>
+            <p>Review past scores, identify weak areas, and monitor your score trends on the dashboard.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom CTA Banner -->
+    <div class="cta-banner-wrapper">
+      <div class="cta-banner">
+        <h2>Ready to Test Your Knowledge?</h2>
+        <p>Check your historical attempts or jump directly into the performance analytics dashboard.</p>
+        <div class="cta-buttons-row">
+          <a href="/history" class="btn-white">
+            View Quiz History
+          </a>
+          <a href="/dashboard" class="btn-ghost-white">
+            Performance Dashboard
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modern SaaS Footer -->
+    <footer>
+      <div class="footer-content">
+        <div class="footer-logo">
+          <div class="logo-icon" style="width: 28px; height: 28px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          Quizify-AI
+        </div>
+
+        <ul class="footer-nav">
+          <li><a href="/">Home</a></li>
+          <li><a href="/history">Quiz History</a></li>
+          <li><a href="/dashboard">Performance Dashboard</a></li>
+          <li><a href="#features">Features</a></li>
+        </ul>
+
+        <div class="footer-copy">
+          Made for smarter learning · Quizify-AI
+        </div>
+      </div>
+    </footer>
+
+    <!-- Interactive Client Scripts -->
+    <script>
+      (function() {
+        // Elements
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('file');
+        const filePreview = document.getElementById('file-preview');
+        const fileNameEl = document.getElementById('file-name');
+        const fileSizeEl = document.getElementById('file-size');
+        const fileRemoveBtn = document.getElementById('file-remove-btn');
+        const dropzoneContent = document.getElementById('dropzone-content');
+
+        const optionCards = document.querySelectorAll('.question-option-card');
+        const nativeSelect = document.getElementById('question_count');
+        const uploadForm = document.getElementById('quiz-upload-form');
+        const submitButton = document.getElementById('submit-button');
+
+        const mobileToggle = document.getElementById('mobile-toggle');
+        const navLinks = document.getElementById('nav-links');
+
+        // Mobile Nav Toggle
+        if (mobileToggle && navLinks) {
+          mobileToggle.addEventListener('click', function() {
+            navLinks.classList.toggle('mobile-open');
+          });
+        }
+
+        // Format bytes helper
+        function formatBytes(bytes) {
+          if (!bytes || bytes === 0) return '0 Bytes';
+          const k = 1024;
+          const sizes = ['Bytes', 'KB', 'MB'];
+          const i = Math.floor(Math.log(bytes) / Math.log(k));
+          return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+
+        // Handle File Selection
+        function updateFileDisplay(file) {
+          if (file) {
+            fileNameEl.textContent = file.name;
+            fileSizeEl.textContent = formatBytes(file.size);
+            filePreview.classList.add('active');
+            dropzoneContent.style.opacity = '0.4';
+          } else {
+            filePreview.classList.remove('active');
+            dropzoneContent.style.opacity = '1';
+            fileInput.value = '';
+          }
+        }
+
+        fileInput.addEventListener('change', function(e) {
+          if (this.files && this.files[0]) {
+            updateFileDisplay(this.files[0]);
+          }
+        });
+
+        // Drag & Drop Feedback
+        ['dragenter', 'dragover'].forEach(eventName => {
+          dropzone.addEventListener(eventName, function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropzone.classList.add('drag-active');
+          }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+          dropzone.addEventListener(eventName, function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropzone.classList.remove('drag-active');
+          }, false);
+        });
+
+        dropzone.addEventListener('drop', function(e) {
+          const dt = e.dataTransfer;
+          if (dt && dt.files && dt.files.length) {
+            const file = dt.files[0];
+            if (file.name.toLowerCase().endsWith('.docx')) {
+              fileInput.files = dt.files;
+              updateFileDisplay(file);
+            } else {
+              alert('Please select a Microsoft Word (.docx) file.');
+            }
+          }
+        });
+
+        // Remove / Change File Button
+        if (fileRemoveBtn) {
+          fileRemoveBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            updateFileDisplay(null);
+            fileInput.click();
+          });
+        }
+
+        // Question Selector Cards
+        optionCards.forEach(card => {
+          card.addEventListener('click', function() {
+            const val = this.getAttribute('data-value');
+            optionCards.forEach(c => c.classList.remove('selected'));
+            this.classList.add('selected');
+            if (nativeSelect) {
+              nativeSelect.value = val;
+            }
+          });
+        });
+
+        // Submit Form Loading State
+        if (uploadForm && submitButton) {
+          uploadForm.addEventListener('submit', function(e) {
+            if (!fileInput.files || !fileInput.files.length) {
+              e.preventDefault();
+              alert('Please select a .docx file first.');
+              return;
+            }
+
+            // Trigger loading visual feedback
+            submitButton.classList.add('loading');
+            submitButton.disabled = true;
+
+            const textDefault = submitButton.querySelector('.btn-text-default');
+            const iconDefault = submitButton.querySelector('.btn-icon-default');
+            const textLoading = submitButton.querySelector('.btn-text-loading');
+
+            if (textDefault) textDefault.style.display = 'none';
+            if (iconDefault) iconDefault.style.display = 'none';
+            if (textLoading) textLoading.style.display = 'inline-block';
+
+            // Submit native form
+            uploadForm.submit();
+          });
+        }
+      })();
+    </script>
   </body>
 </html>

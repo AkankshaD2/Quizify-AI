@@ -1,124 +1,284 @@
-# 🧠 Quizify-AI
+﻿# Quizify-AI
 
-> Turn your notes into personalized quizzes — automatically.
+> Local, AI-powered quiz generation platform transforming your study notes into grounded, multiple-choice quizzes.
 
-Quizify-AI is an AI-powered quiz generator that transforms your
-study notes into grounded, multiple-choice quizzes.
-
-Instead of blindly asking an LLM to generate questions, Quizify-AI
-first understands the structure of your notes, retrieves relevant
-content, generates questions, and validates them against the
-original source.
-
-🎯 The goal: generate questions that are actually based on what
-you studied — not random AI knowledge.
+Quizify-AI is a Retrieval-Augmented Generation (RAG) study platform built with Flask, Python, SQLite, Sentence Transformers, and Ollama (Llama 3.2). Instead of blindly prompting a language model to invent questions from raw text, Quizify-AI extracts and structures your study notes, creates semantic text chunks, generates vector embeddings, retrieves context-relevant material, and validates every generated question against source facts before presenting it to you.
 
 ---
 
-## ✨ What makes Quizify-AI different?
+## Key Features
 
-Most AI quiz generators simply send your notes to an LLM and hope
-the generated questions are correct.
-
-Quizify-AI follows a different approach:
-
-📄 Understand the notes
-        ↓
-✂️ Split them intelligently
-        ↓
-🔎 Find the most relevant content
-        ↓
-🤖 Generate quiz questions
-        ↓
-🛡️ Validate the generated facts
-        ↓
-📝 Produce the final quiz
-
-This makes the system a Retrieval-Augmented Generation (RAG)
-pipeline rather than a simple LLM wrapper.
+- **Document Ingestion (DOCX):** Parses Microsoft Word documents (`.docx`), extracts text paragraphs, removes noise, and identifies structural sections (definitions, features, advantages, and limitations).
+- **Intelligent Chunking:** Partitions source documents into logically coherent chunks while preserving unit, topic, and section metadata.
+- **Semantic Vector Retrieval:** Uses Sentence Transformers (`all-MiniLM-L6-v2`) to produce 384-dimensional embeddings and calculates cosine similarity via NumPy to match key concepts.
+- **Local AI Question Generation:** Employs a locally hosted Llama 3.2 model via Ollama to generate grounded, 4-option multiple-choice questions without sending study data to third-party cloud APIs.
+- **Configurable Quiz Lengths:** Select between **5**, **10**, or **15** questions per quiz session based on document depth and study goals.
+- **Deterministic & Structural Validation:** Checks generated questions for schema compliance, unique options (A, B, C, D), valid answer keys, grounded explanations, and verified numeric quantities before acceptance.
+- **Instant Scoring & Question Review:** Evaluates submitted answers, calculates score percentages, and displays answer keys alongside grounded explanations.
+- **Attempt History & Analytics Dashboard:** Automatically records every quiz attempt in SQLite and presents a visual performance dashboard with score charts and historical trends.
 
 ---
 
-## 🚀 Current Features
+## Screenshots
 
-### 📚 Document Processing
-- Extracts content from study documents
-- Detects units, topics and sections
-- Removes irrelevant/noisy content
+<!-- Add your screenshots in an assets/ or docs/ folder and link them below -->
 
-### ✂️ Intelligent Chunking
-- Splits notes into meaningful chunks
-- Preserves unit/topic/section metadata
-- Handles oversized sections automatically
+### 1. Homepage & Upload Studio
+![Homepage Screenshot](docs/screenshots/homepage.png)
+*Drag-and-drop DOCX upload studio with question count selection (5, 10, 15).*
 
-### 🔎 Semantic Retrieval
-- Uses Sentence Transformers
-- Generates 384-dimensional embeddings
-- Uses NumPy cosine similarity
-- Combines semantic + keyword + phrase matching
-- Supports topic and section-aware retrieval
+### 2. Interactive Quiz Interface
+![Quiz Screenshot](docs/screenshots/quiz.png)
+*Interactive multiple-choice quiz session generated directly from uploaded lecture notes.*
 
-### 🤖 Local AI Question Generation
-- Powered by Ollama
-- Uses Llama 3.2 locally
-- Generates structured MCQs
-- Supports difficulty levels
+### 3. Results & Explanations Review
+![Results Screenshot](docs/screenshots/result.png)
+*Instant scoring breakdown, answer verification, and question-by-question explanations.*
 
-### 🛡️ Quiz Validation
-Generated questions are not blindly accepted.
-
-Quizify-AI checks:
-
-✓ Is the correct answer actually supported by the notes?
-✓ Are numbers grounded in the source?
-✓ Is the explanation supported by the source?
-✓ Does the generated question respect the requested section?
-✓ Does the LLM agree with the deterministic validation?
-
-Only validated questions are accepted.
+### 4. Performance Analytics Dashboard
+![Dashboard Screenshot](docs/screenshots/dashboard.png)
+*Performance dashboard displaying average scores, attempt charts, and historical test logs.*
 
 ---
 
-## 🏗️ Architecture
+## Technologies Used
+
+| Layer | Technologies |
+| :--- | :--- |
+| **Backend Framework** | Python 3, Flask, Werkzeug |
+| **Document Processing** | python-docx |
+| **Embeddings & Search** | Sentence Transformers (`all-MiniLM-L6-v2`), NumPy |
+| **LLM Inference** | Ollama, Llama 3.2 (local inference) |
+| **Data Validation** | Pydantic |
+| **Database** | SQLite3 |
+| **Frontend** | HTML5, CSS3 (Modern SaaS design system), Vanilla JavaScript |
+
+---
+
+## How It Works (Pipeline Details)
+
+Quizify-AI operates as a full Retrieval-Augmented Generation (RAG) pipeline:
+
+1. **Document Processing & Structure Detection**
+   - The user uploads notes in `.docx` format.
+   - Paragraphs are extracted, cleaned of redundant formatting, and parsed to detect hierarchical markers such as Units, Topics, and Sections (Definitions, Features, Advantages, Limitations).
+2. **Intelligent Chunking**
+   - Content is segmented into structured chunks. Each chunk retains metadata describing its parent topic, unit, and section type.
+3. **Embeddings & Vector Indexing**
+   - The chunks are converted into 384-dimensional dense vectors using the `all-MiniLM-L6-v2` Sentence Transformer model.
+   - An in-memory vector store computes NumPy cosine similarity for semantic matching.
+4. **Local LLM Question Generation**
+   - The system feeds structured chunk contexts into Ollama running the `llama3.2` model.
+   - Pydantic models enforce structured JSON output comprising a question prompt, four distinct options (A, B, C, D), the correct answer key, and an explanation.
+5. **Multi-Step Grounding & Validation**
+   - Each generated question undergoes strict validation:
+     - **Structural integrity:** Verifies that all four options are present, non-empty, and distinct.
+     - **Numeric grounding:** Ensures numbers, measurements, and quantities mentioned in the question stem or correct answer exist in the source chunk.
+     - **Fact grounding:** Verifies that the correct answer and explanation are directly substantiated by the notes.
+     - **Section alignment:** Ensures feature, advantage, and limitation questions accurately reflect the structural context.
+   - Unvalidated or hallucinated questions are rejected and regenerated up to maximum retry limits.
+6. **Scoring & Persistence**
+   - The user submits their answers, which are scored against the session answer key.
+   - The quiz results (filename, total questions, correct count, percentage score, and timestamp) are stored in SQLite (`database/quizify.db`).
+
+---
+
+## System Architecture
 
 ```text
-                 ┌─────────────────┐
-                 │   Study Notes   │
-                 │   DOCX / PDF    │
-                 └────────┬────────┘
-                          ↓
-                 ┌─────────────────┐
-                 │    Document     │
-                 │   Processing    │
-                 └────────┬────────┘
-                          ↓
-                 ┌─────────────────┐
-                 │    Intelligent  │
-                 │     Chunking    │
-                 └────────┬────────┘
-                          ↓
-                 ┌─────────────────┐
-                 │    Embeddings   │
-                 │ SentenceTransformer
-                 └────────┬────────┘
-                          ↓
-                 ┌─────────────────┐
-                 │    Retrieval    │
-                 │ Semantic +      │
-                 │ Keyword Search  │
-                 └────────┬────────┘
-                          ↓
-                 ┌─────────────────┐
-                 │   Llama 3.2     │
-                 │  Question Gen.  │
-                 └────────┬────────┘
-                          ↓
-                 ┌─────────────────┐
-                 │    Validation   │
-                 │ Deterministic + │
-                 │      LLM        │
-                 └────────┬────────┘
-                          ↓
-                 ┌─────────────────┐
-                 │  Validated MCQ  │
-                 └─────────────────┘
++---------------------------------------------------------+
+|                  User Browser (Web UI)                  |
+|  - DOCX Upload Dropzone                                 |
+|  - Quiz Length Selection (5, 10, 15 Questions)          |
+|  - Interactive Quiz Session & Performance Dashboard     |
++----------------------------+----------------------------+
+                             | HTTP (GET / POST)
+                             v
++---------------------------------------------------------+
+|                    Flask Application                    |
+|                         (app.py)                        |
++-------+--------------------+--------------------+-------+
+        |                    |                    |
+        v                    v                    v
++---------------+    +---------------+    +---------------+
+|   Document    |    |   Database    |    |  Quiz Scoring |
+|  Processing   |    |  (SQLite3)    |    |    Service    |
++-------+-------+    +-------+-------+    +-------+-------+
+        |                    |                    |
+        | - docx_reader      | - quizify.db       | - answer_checker
+        | - cleaner          | - questions table  | - score_calc
+        | - structure_detect | - attempts table   |
+        | - chunker          |                    |
+        v                    +--------------------+
++---------------+
+|  Embeddings   |
+|   & Vectors   |
++-------+-------+
+        |
+        | - SentenceTransformer (all-MiniLM-L6-v2)
+        | - NumPy Cosine Similarity Vector Store
+        | - Hybrid Keyword & Semantic Retriever
+        v
++---------------------------------------------------------+
+|                  Quiz Generation Service                |
++----------------------------+----------------------------+
+                             |
+                             +--> Ollama (Local Llama 3.2)
+                             |    Generates JSON MCQ items
+                             |
+                             +--> Quiz Validator
+                                  - Numeric grounding check
+                                  - Option uniqueness check
+                                  - Factual grounding check
+```
+
+---
+
+## Project Folder Structure
+
+```text
+Quizify-AI/
+â”œâ”€â”€ app.py                      # Main Flask application and route controllers
+â”œâ”€â”€ database/                   # SQLite database access and persistence
+â”‚   â”œâ”€â”€ __init__.py
+â”‚   â”œâ”€â”€ db_manager.py           # Database connection, schemas, and queries
+â”‚   â””â”€â”€ quizify.db              # SQLite database file
+â”œâ”€â”€ document_processing/        # Ingestion, structuring, and vector search
+â”‚   â”œâ”€â”€ __init__.py
+â”‚   â”œâ”€â”€ chunker.py              # Semantic and structured chunk creation
+â”‚   â”œâ”€â”€ cleaner.py              # Text normalization and whitespace cleanup
+â”‚   â”œâ”€â”€ docx_reader.py          # Word document paragraph extraction
+â”‚   â”œâ”€â”€ embedding_generator.py  # 384-dimensional vector embedding generator
+â”‚   â”œâ”€â”€ retriever.py            # Hybrid semantic, keyword, and phrase retriever
+â”‚   â”œâ”€â”€ structure_builder.py    # Document hierarchy and section modeling
+â”‚   â”œâ”€â”€ structure_detector.py   # Unit, topic, and section pattern detection
+â”‚   â””â”€â”€ vector_store.py         # In-memory vector store and cosine similarity
+â”œâ”€â”€ quiz_generation/            # LLM prompt engineering, schemas, and validation
+â”‚   â”œâ”€â”€ __init__.py
+â”‚   â”œâ”€â”€ question_generator.py   # Ollama Llama 3.2 MCQ generation pipeline
+â”‚   â”œâ”€â”€ quiz_schema.py          # Pydantic schemas for questions and validation
+â”‚   â”œâ”€â”€ quiz_service.py         # Multi-question generation coordinator
+â”‚   â””â”€â”€ quiz_validator.py       # Deterministic and grounding verification
+â”œâ”€â”€ quiz_scoring/               # Quiz answer evaluation and scoring
+â”‚   â”œâ”€â”€ __init__.py
+â”‚   â”œâ”€â”€ answer_checker.py       # Compares submitted answers against answer key
+â”‚   â”œâ”€â”€ score_calculator.py     # Calculates correct/incorrect counts and percentages
+â”‚   â””â”€â”€ scoring_service.py      # Evaluates quiz attempt submissions
+â”œâ”€â”€ static/                     # Static assets
+â”‚   â””â”€â”€ style.css               # Modern EdTech SaaS CSS design system
+â”œâ”€â”€ templates/                  # Jinja2 HTML templates
+â”‚   â”œâ”€â”€ dashboard.html          # Performance analytics and attempt charts
+â”‚   â”œâ”€â”€ history.html            # Quiz attempt history log
+â”‚   â”œâ”€â”€ index.html              # Homepage and DOCX upload studio
+â”‚   â”œâ”€â”€ quiz.html               # Quiz taking interface
+â”‚   â””â”€â”€ result.html             # Quiz score and question review
+â”œâ”€â”€ uploads/                    # Storage directory for uploaded DOCX documents
+â””â”€â”€ README.md                   # Project documentation
+```
+
+---
+
+## Installation & Setup (Windows)
+
+### Prerequisites
+
+- **Windows 10 / 11** (64-bit)
+- **Python 3.10+** (Python 3.10, 3.11, or 3.12 recommended)
+- **Ollama** installed on your system
+
+---
+
+### Step 1: Install and Configure Ollama with Llama 3.2
+
+1. Download and install Ollama for Windows from the official website:
+   - [https://ollama.com/download](https://ollama.com/download)
+2. Run the installer and verify installation by opening **PowerShell** or **Command Prompt** and typing:
+   ```powershell
+   ollama --version
+   ```
+3. Pull the local **Llama 3.2** model:
+   ```powershell
+   ollama pull llama3.2
+   ```
+4. Verify that the model is ready:
+   ```powershell
+   ollama list
+   ```
+   *(Ensure Ollama is running in the background. By default, it serves at `http://127.0.0.1:11434`)*.
+
+---
+
+### Step 2: Clone or Download the Project
+
+Navigate to your workspace directory in PowerShell:
+
+```powershell
+cd C:\path\to\your\projects
+git clone https://github.com/AkankshaD2/Quizify-AI.git
+cd Quizify-AI
+```
+
+---
+
+### Step 3: Create and Activate a Virtual Environment
+
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+```
+
+*Note: If you encounter an execution policy error in PowerShell, run `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser` and try activating again.*
+
+---
+
+### Step 4: Install Dependencies
+
+Install the required Python packages into your virtual environment:
+
+```powershell
+pip install -r requirements.txt
+```
+
+---
+
+## Running the Application
+
+1. Make sure Ollama is running in the background.
+2. In your activated virtual environment terminal, start the Flask development server:
+
+```powershell
+python app.py
+```
+
+3. Open your web browser and navigate to:
+
+```text
+http://127.0.0.1:5000
+```
+
+---
+
+## How to Use the Application
+
+1. **Upload Study Notes:**
+   - On the homepage (`http://127.0.0.1:5000`), drag and drop or browse to upload your study notes.
+   - *Note: Only Microsoft Word (`.docx`) files are supported currently.*
+2. **Select Question Count:**
+   - Choose the number of questions you wish to generate: **5**, **10** (default), or **15**.
+3. **Generate Quiz:**
+   - Click **Upload Notes & Generate Quiz**. The system parses the document, builds semantic chunks, generates vectors, and prompts the local Llama 3.2 model.
+4. **Attempt Quiz:**
+   - Read through each generated question, choose an option (A, B, C, or D), and click **Submit Quiz**.
+5. **Review Results & Explanations:**
+   - View your total percentage score, correct answer count, and question-by-question review with source-backed explanations.
+6. **Track History & Analytics:**
+   - Navigate to **Quiz History** (`/history`) to see previous attempts.
+   - Navigate to **Performance Dashboard** (`/dashboard`) to view overall statistics, score trends, and individual attempt performance.
+
+---
+
+## Supported File Format & Limitations
+
+- **Supported Format:** Microsoft Word documents (`.docx`) only. Files must contain text notes and headings.
+- **Question Length:** 5, 10, or 15 questions per session.
+- **Model Requirement:** Local inference relies on Ollama running `llama3.2`.

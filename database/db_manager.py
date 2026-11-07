@@ -31,6 +31,16 @@ def create_tables():
             difficulty TEXT NOT NULL
         )
     """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS quiz_attempts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            filename TEXT NOT NULL,
+            total_questions INTEGER NOT NULL,
+            correct_answers INTEGER NOT NULL,
+            score REAL NOT NULL,
+            attempted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
 
     connection.commit()
     connection.close()
@@ -137,3 +147,67 @@ def get_question_count():
     connection.close()
 
     return count
+def get_quiz_history():
+    """Retrieve all previous quiz attempts."""
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT * FROM quiz_attempts
+        ORDER BY attempted_at DESC
+    """)
+
+    attempts = cursor.fetchall()
+
+    connection.close()
+
+    return attempts
+def save_quiz_attempt(filename, total_questions, correct_answers, score):
+    """Save one completed quiz attempt to the database."""
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        INSERT INTO quiz_attempts (
+            filename,
+            total_questions,
+            correct_answers,
+            score
+        )
+        VALUES (?, ?, ?, ?)
+    """, (
+        filename,
+        total_questions,
+        correct_answers,
+        score
+    ))
+
+    connection.commit()
+    attempt_id = cursor.lastrowid
+    connection.close()
+
+    return attempt_id
+def get_quiz_statistics():
+    """Calculate overall quiz performance statistics."""
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT
+            COUNT(*) AS total_attempts,
+            AVG(score) AS average_score,
+            MAX(score) AS highest_score,
+            MIN(score) AS lowest_score,
+            SUM(total_questions) AS total_questions,
+            SUM(correct_answers) AS total_correct
+        FROM quiz_attempts
+    """)
+
+    statistics = cursor.fetchone()
+
+    connection.close()
+
+    return statistics
