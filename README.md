@@ -335,4 +335,4 @@ Computer Engineering Student | Aspiring AI/ML Engineer
 
 ---
 
-\<p align="center">   \<strong>Built with Python, Flask, and AI.\</strong> \</p>
+
