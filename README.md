@@ -4,7 +4,7 @@ Transform your study notes into interactive multiple-choice quizzes using AI.
 
 Quizify-AI is a web-based study platform built with Python and Flask that converts Microsoft Word study notes into structured MCQ quizzes. It supports both **Google Gemini for cloud-based AI generation** and **Ollama for local AI inference**, with question validation, automatic scoring, attempt history, and performance analytics.
 
-\<p align="center">   \<a href="[https://quizify-ai-or8w.onrender.com](https://quizify-ai-or8w.onrender.com)">\<strong>🚀 Live Demo\</strong>\</a> |   \<a href="[https://github.com/AkankshaD2/Quizify-AI](https://github.com/AkankshaD2/Quizify-AI)">\<strong>💻 GitHub Repository\</strong>\</a> \</p>
+🚀 **[Live Demo](https://quizify-ai-or8w.onrender.com)** | 💻 **[GitHub Repository](https://github.com/AkankshaD2/Quizify-AI)**
 
 ---
 
@@ -26,25 +26,25 @@ Quizify-AI is a web-based study platform built with Python and Flask that conver
 
 ### 1. Homepage – Document Upload
 
-
+![Homepage Screenshot](docs/screenshots/homepage.png)
 
 Upload study notes and select the number of questions to generate.
 
 ### 2. Interactive Quiz Interface
 
-
+![Quiz Screenshot](docs/screenshots/quiz.png)
 
 Attempt AI-generated multiple-choice questions in an interactive interface.
 
 ### 3. Results and Explanations
 
-
+![Results Screenshot](docs/screenshots/result.png)
 
 View your score, correct answers, and question-wise explanations.
 
 ### 4. Performance Dashboard
 
-
+![Dashboard Screenshot](docs/screenshots/dashboard.png)
 
 Track previous attempts and monitor quiz performance.
 
