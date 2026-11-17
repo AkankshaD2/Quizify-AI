@@ -15,6 +15,7 @@ app = Flask(__name__)
 # Application settings
 app.secret_key = os.environ.get("SECRET_KEY", "local-development-secret")
 app.config["UPLOAD_FOLDER"] = "uploads"
+Path(app.config["UPLOAD_FOLDER"]).mkdir(parents=True, exist_ok=True)
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
 
 ALLOWED_EXTENSIONS = {"docx"}
