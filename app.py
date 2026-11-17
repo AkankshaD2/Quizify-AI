@@ -2,6 +2,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from werkzeug.utils import secure_filename
 from pathlib import Path
+import os
 import uuid
 from document_processing.docx_reader import extract_docx
 from document_processing.structure_builder import build_structure
@@ -12,7 +13,7 @@ from document_processing.chunker import create_chunks
 app = Flask(__name__)
 
 # Application settings
-app.secret_key = "quizify-ai-development-key"
+app.secret_key = os.environ.get("SECRET_KEY", "local-development-secret")
 app.config["UPLOAD_FOLDER"] = "uploads"
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
 
@@ -174,4 +175,4 @@ def dashboard():
             attempts=attempts
         )
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)

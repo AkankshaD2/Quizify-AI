@@ -1,6 +1,6 @@
 import re
 import json
-from ollama import chat
+from quiz_generation.ai_provider import generate_text
 from pydantic import ValidationError
 
 from quiz_generation.quiz_schema import (
@@ -667,23 +667,11 @@ def generate_question(chunk):
         chunk
     )
 
-    response = chat(
-        model="llama3.2",
-        messages=[
-            {
-                "role": "user",
-                "content": prompt,
-            }
-        ],
-        format=QuizQuestion.model_json_schema(),
-        options={
-            "temperature": 0.2,
-            "num_predict": 500,
-        },
-    )
-
-    raw_response = (
-        response.message.content.strip()
+    raw_response = generate_text(
+        prompt,
+        response_schema=QuizQuestion,
+        temperature=0.2,
+        max_output_tokens=500,
     )
 
     print(

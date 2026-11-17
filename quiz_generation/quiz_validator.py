@@ -1,6 +1,6 @@
 import re
 
-from ollama import chat
+from quiz_generation.ai_provider import generate_text
 
 
 def normalize_text(text):
@@ -752,21 +752,11 @@ decision, but the final classification MUST contain
 exactly one of the two valid labels.
 """
 
-    response = chat(
-    model="llama3.2",
-    messages=[
-        {
-            "role": "user",
-            "content": prompt,
-        }
-    ],
-    options={
-        "temperature": 0,
-        "num_predict": 200,
-    },
-)
-
-    result = response.message.content.strip()
+    result = generate_text(
+        prompt,
+        temperature=0,
+        max_output_tokens=200,
+    )
 
     print(
         "\n===== LLM VALIDATION ====="
