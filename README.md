@@ -1,213 +1,232 @@
-﻿# Quizify-AI
+# Quizify-AI – AI-Powered Quiz Generator
 
-> Local, AI-powered quiz generation platform transforming your study notes into grounded, multiple-choice quizzes.
+Transform your study notes into interactive multiple-choice quizzes using AI.
 
-Quizify-AI is a Retrieval-Augmented Generation (RAG) study platform built with Flask, Python, SQLite, Sentence Transformers, and Ollama (Llama 3.2). Instead of blindly prompting a language model to invent questions from raw text, Quizify-AI extracts and structures your study notes, creates semantic text chunks, generates vector embeddings, retrieves context-relevant material, and validates every generated question against source facts before presenting it to you.
+Quizify-AI is a web-based study platform built with Python and Flask that converts Microsoft Word study notes into structured MCQ quizzes. It supports both **Google Gemini for cloud-based AI generation** and **Ollama for local AI inference**, with question validation, automatic scoring, attempt history, and performance analytics.
 
----
-
-## Key Features
-
-- **Document Ingestion (DOCX):** Parses Microsoft Word documents (`.docx`), extracts text paragraphs, removes noise, and identifies structural sections (definitions, features, advantages, and limitations).
-- **Intelligent Chunking:** Partitions source documents into logically coherent chunks while preserving unit, topic, and section metadata.
-- **Semantic Vector Retrieval:** Uses Sentence Transformers (`all-MiniLM-L6-v2`) to produce 384-dimensional embeddings and calculates cosine similarity via NumPy to match key concepts.
-- **Local AI Question Generation:** Employs a locally hosted Llama 3.2 model via Ollama to generate grounded, 4-option multiple-choice questions without sending study data to third-party cloud APIs.
-- **Configurable Quiz Lengths:** Select between **5**, **10**, or **15** questions per quiz session based on document depth and study goals.
-- **Deterministic & Structural Validation:** Checks generated questions for schema compliance, unique options (A, B, C, D), valid answer keys, grounded explanations, and verified numeric quantities before acceptance.
-- **Instant Scoring & Question Review:** Evaluates submitted answers, calculates score percentages, and displays answer keys alongside grounded explanations.
-- **Attempt History & Analytics Dashboard:** Automatically records every quiz attempt in SQLite and presents a visual performance dashboard with score charts and historical trends.
+\<p align="center">   \<a href="[https://quizify-ai-or8w.onrender.com](https://quizify-ai-or8w.onrender.com)">\<strong>🚀 Live Demo\</strong>\</a> |   \<a href="[https://github.com/AkankshaD2/Quizify-AI](https://github.com/AkankshaD2/Quizify-AI)">\<strong>💻 GitHub Repository\</strong>\</a> \</p>
 
 ---
 
-## Screenshots
+## ✨ Key Features
 
-<!-- Add your screenshots in an assets/ or docs/ folder and link them below -->
+- **DOCX Document Upload:** Upload Microsoft Word study notes through a simple drag-and-drop interface.
+- **Intelligent Document Processing:** Extracts, cleans, and organizes document content into meaningful sections and chunks.
+- **Dual AI Provider Support:** Generate questions using Google Gemini API or locally hosted Ollama with Llama 3.2.
+- **Structured MCQ Generation:** Generates multiple-choice questions with four options, correct answers, and explanations.
+- **Question Validation:** Uses Pydantic schemas and validation checks to improve question structure and answer quality.
+- **Configurable Quiz Length:** Choose between 5, 10, or 15 questions per session.
+- **Automatic Scoring:** Calculates scores and displays correct answers with explanations.
+- **Quiz History:** Stores previous quiz attempts using SQLite.
+- **Performance Dashboard:** Displays quiz statistics, score trends, and historical performance.
 
-### 1. Homepage & Upload Studio
-![Homepage Screenshot](docs/screenshots/homepage.png)
-*Drag-and-drop DOCX upload studio with question count selection (5, 10, 15).*
+---
+
+## 📸 Screenshots
+
+### 1. Homepage – Document Upload
+
+
+
+Upload study notes and select the number of questions to generate.
 
 ### 2. Interactive Quiz Interface
-![Quiz Screenshot](docs/screenshots/quiz.png)
-*Interactive multiple-choice quiz session generated directly from uploaded lecture notes.*
 
-### 3. Results & Explanations Review
-![Results Screenshot](docs/screenshots/result.png)
-*Instant scoring breakdown, answer verification, and question-by-question explanations.*
 
-### 4. Performance Analytics Dashboard
-![Dashboard Screenshot](docs/screenshots/dashboard.png)
-*Performance dashboard displaying average scores, attempt charts, and historical test logs.*
 
----
+Attempt AI-generated multiple-choice questions in an interactive interface.
 
-## Technologies Used
+### 3. Results and Explanations
 
-| Layer | Technologies |
-| :--- | :--- |
-| **Backend Framework** | Python 3, Flask, Werkzeug |
-| **Document Processing** | python-docx |
-| **Embeddings & Search** | Sentence Transformers (`all-MiniLM-L6-v2`), NumPy |
-| **LLM Inference** | Ollama, Llama 3.2 (local inference) |
-| **Data Validation** | Pydantic |
-| **Database** | SQLite3 |
-| **Frontend** | HTML5, CSS3 (Modern SaaS design system), Vanilla JavaScript |
+
+
+View your score, correct answers, and question-wise explanations.
+
+### 4. Performance Dashboard
+
+
+
+Track previous attempts and monitor quiz performance.
 
 ---
 
-## How It Works (Pipeline Details)
+## 🛠️ Technology Stack
 
-Quizify-AI operates as a full Retrieval-Augmented Generation (RAG) pipeline:
-
-1. **Document Processing & Structure Detection**
-   - The user uploads notes in `.docx` format.
-   - Paragraphs are extracted, cleaned of redundant formatting, and parsed to detect hierarchical markers such as Units, Topics, and Sections (Definitions, Features, Advantages, Limitations).
-2. **Intelligent Chunking**
-   - Content is segmented into structured chunks. Each chunk retains metadata describing its parent topic, unit, and section type.
-3. **Embeddings & Vector Indexing**
-   - The chunks are converted into 384-dimensional dense vectors using the `all-MiniLM-L6-v2` Sentence Transformer model.
-   - An in-memory vector store computes NumPy cosine similarity for semantic matching.
-4. **Local LLM Question Generation**
-   - The system feeds structured chunk contexts into Ollama running the `llama3.2` model.
-   - Pydantic models enforce structured JSON output comprising a question prompt, four distinct options (A, B, C, D), the correct answer key, and an explanation.
-5. **Multi-Step Grounding & Validation**
-   - Each generated question undergoes strict validation:
-     - **Structural integrity:** Verifies that all four options are present, non-empty, and distinct.
-     - **Numeric grounding:** Ensures numbers, measurements, and quantities mentioned in the question stem or correct answer exist in the source chunk.
-     - **Fact grounding:** Verifies that the correct answer and explanation are directly substantiated by the notes.
-     - **Section alignment:** Ensures feature, advantage, and limitation questions accurately reflect the structural context.
-   - Unvalidated or hallucinated questions are rejected and regenerated up to maximum retry limits.
-6. **Scoring & Persistence**
-   - The user submits their answers, which are scored against the session answer key.
-   - The quiz results (filename, total questions, correct count, percentage score, and timestamp) are stored in SQLite (`database/quizify.db`).
+| Component            | Technologies          |
+| -------------------- | --------------------- |
+| Programming Language | Python                |
+| Backend Framework    | Flask                 |
+| AI – Cloud           | Google Gemini API     |
+| AI – Local           | Ollama, Llama 3.2     |
+| Document Processing  | python-docx           |
+| Data Validation      | Pydantic              |
+| Database             | SQLite                |
+| Frontend             | HTML, CSS, JavaScript |
+| Deployment           | Render                |
+| Version Control      | Git, GitHub           |
 
 ---
 
-## System Architecture
+## ⚙️ How It Works
+
+Quizify-AI follows a document-to-quiz generation workflow.
 
 ```text
-+---------------------------------------------------------+
-|                  User Browser (Web UI)                  |
-|  - DOCX Upload Dropzone                                 |
-|  - Quiz Length Selection (5, 10, 15 Questions)          |
-|  - Interactive Quiz Session & Performance Dashboard     |
-+----------------------------+----------------------------+
-                             | HTTP (GET / POST)
-                             v
-+---------------------------------------------------------+
-|                    Flask Application                    |
-|                         (app.py)                        |
-+-------+--------------------+--------------------+-------+
-        |                    |                    |
-        v                    v                    v
-+---------------+    +---------------+    +---------------+
-|   Document    |    |   Database    |    |  Quiz Scoring |
-|  Processing   |    |  (SQLite3)    |    |    Service    |
-+-------+-------+    +-------+-------+    +-------+-------+
-        |                    |                    |
-        | - docx_reader      | - quizify.db       | - answer_checker
-        | - cleaner          | - questions table  | - score_calc
-        | - structure_detect | - attempts table   |
-        | - chunker          |                    |
-        v                    +--------------------+
-+---------------+
-|  Embeddings   |
-|   & Vectors   |
-+-------+-------+
-        |
-        | - SentenceTransformer (all-MiniLM-L6-v2)
-        | - NumPy Cosine Similarity Vector Store
-        | - Hybrid Keyword & Semantic Retriever
-        v
-+---------------------------------------------------------+
-|                  Quiz Generation Service                |
-+----------------------------+----------------------------+
-                             |
-                             +--> Ollama (Local Llama 3.2)
-                             |    Generates JSON MCQ items
-                             |
-                             +--> Quiz Validator
-                                  - Numeric grounding check
-                                  - Option uniqueness check
-                                  - Factual grounding check
+       User Uploads DOCX Notes
+                 |
+                 v
+       Document Processing
+                 |
+                 v
+       Text Extraction & Cleaning
+                 |
+                 v
+       Content Structuring
+                 |
+                 v
+        Intelligent Chunking
+                 |
+                 v
+          AI Question Generation
+                 |
+          +------+------+
+          |             |
+          v             v
+      Gemini API      Ollama
+          |          (Llama 3.2)
+          |             |
+          +------+------+
+                 |
+                 v
+        Question Validation
+                 |
+                 v
+         Interactive Quiz
+                 |
+                 v
+          Answer Submission
+                 |
+                 v
+          Score Calculation
+                 |
+                 v
+        Results & Explanations
+                 |
+                 v
+       SQLite History & Dashboard
 ```
 
+### Workflow Explanation
+
+1. **Document Upload:** The user uploads study notes in DOCX format.
+2. **Text Extraction:** The application extracts paragraphs and relevant document structure.
+3. **Content Processing:** Extracted content is cleaned, organized, and divided into meaningful chunks.
+4. **AI Generation:** The selected AI provider generates MCQs from the processed content.
+5. **Validation:** Generated questions are checked for schema compliance, option structure, answer validity, and other quality constraints.
+6. **Quiz Attempt:** The user answers the generated questions through the web interface.
+7. **Scoring:** Submitted answers are evaluated and a score is calculated.
+8. **History and Analytics:** Quiz attempts are stored in SQLite and displayed through the dashboard.
 
 ---
 
-## Installation & Setup (Windows)
+## 🤖 AI Provider Configuration
+
+Quizify-AI supports two AI providers.
+
+| Feature   | Gemini                    | Ollama                                       |
+| --------- | ------------------------- | -------------------------------------------- |
+| Inference | Cloud-based               | Local                                        |
+| Model     | Configurable Gemini model | Llama 3.2                                    |
+| API Key   | Required                  | Not required                                 |
+| Internet  | Required                  | Not required for inference after model setup |
+| Execution | Hosted API                | Local machine                                |
+
+The deployed Render application is configured to use Gemini. Local execution can use either provider, depending on the environment configuration.
+
+---
+
+## 🚀 Live Deployment
+
+The application is deployed using Render.
+
+**Live application:** [https://quizify-ai-or8w.onrender.com](https://quizify-ai-or8w.onrender.com)
+
+### Render Configuration
+
+| Setting       | Value                                    |
+| ------------- | ---------------------------------------- |
+| Runtime       | Python 3                                 |
+| Build Command | `pip install -r requirements-render.txt` |
+| Start Command | `gunicorn app:app`                       |
+| Branch        | `updated-project`                        |
+
+### Environment Variables
+
+Configure the following environment variables in the Render dashboard:
+
+```text
+AI_PROVIDER=gemini
+GEMINI_MODEL=gemini-3.5-flash-lite
+GEMINI_API_KEY=your_gemini_api_key
+SECRET_KEY=your_secure_secret_key
+```
+
+Keep API keys and secret values private. Never commit them to GitHub.
+
+---
+
+## 💻 Local Installation and Setup
 
 ### Prerequisites
 
-- **Windows 10 / 11** (64-bit)
-- **Python 3.10+** (Python 3.10, 3.11, or 3.12 recommended)
-- **Ollama** installed on your system
+- Python 3.10 or later
+- Git
+- Google Gemini API key (for Gemini inference), or Ollama (for local inference)
 
----
-
-### Step 1: Install and Configure Ollama with Llama 3.2
-
-1. Download and install Ollama for Windows from the official website:
-   - [https://ollama.com/download](https://ollama.com/download)
-2. Run the installer and verify installation by opening **PowerShell** or **Command Prompt** and typing:
-   ```powershell
-   ollama --version
-   ```
-3. Pull the local **Llama 3.2** model:
-   ```powershell
-   ollama pull llama3.2
-   ```
-4. Verify that the model is ready:
-   ```powershell
-   ollama list
-   ```
-   *(Ensure Ollama is running in the background. By default, it serves at `http://127.0.0.1:11434`)*.
-
----
-
-### Step 2: Clone or Download the Project
-
-Navigate to your workspace directory in PowerShell:
+### Step 1: Clone the Repository
 
 ```powershell
-cd C:\path\to\your\projects
 git clone https://github.com/AkankshaD2/Quizify-AI.git
 cd Quizify-AI
 ```
 
----
-
-### Step 3: Create and Activate a Virtual Environment
+### Step 2: Create a Virtual Environment
 
 ```powershell
-python -m venv venv
-.\venv\Scripts\Activate.ps1
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 ```
 
-*Note: If you encounter an execution policy error in PowerShell, run `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser` and try activating again.*
-
----
-
-### Step 4: Install Dependencies
-
-Install the required Python packages into your virtual environment:
+### Step 3: Install Dependencies
 
 ```powershell
 pip install -r requirements.txt
 ```
 
----
+For Gemini-based execution, configure the environment variables:
 
-## Running the Application
+```powershell
+$env:AI_PROVIDER="gemini"
+$env:GEMINI_MODEL="gemini-3.5-flash-lite"
+$env:GEMINI_API_KEY="your_gemini_api_key"
+$env:SECRET_KEY="your_secure_secret_key"
+```
 
-1. Make sure Ollama is running in the background.
-2. In your activated virtual environment terminal, start the Flask development server:
+For local Ollama execution, install Ollama and download Llama 3.2:
+
+```powershell
+ollama pull llama3.2
+```
+
+Configure the application to use Ollama according to its local AI provider settings.
+
+### Step 4: Run the Application
 
 ```powershell
 python app.py
 ```
 
-3. Open your web browser and navigate to:
+Open your browser:
 
 ```text
 http://127.0.0.1:5000
@@ -215,27 +234,105 @@ http://127.0.0.1:5000
 
 ---
 
-## How to Use the Application
+## 📖 How to Use
 
-1. **Upload Study Notes:**
-   - On the homepage (`http://127.0.0.1:5000`), drag and drop or browse to upload your study notes.
-   - *Note: Only Microsoft Word (`.docx`) files are supported currently.*
-2. **Select Question Count:**
-   - Choose the number of questions you wish to generate: **5**, **10** (default), or **15**.
-3. **Generate Quiz:**
-   - Click **Upload Notes & Generate Quiz**. The system parses the document, builds semantic chunks, generates vectors, and prompts the local Llama 3.2 model.
-4. **Attempt Quiz:**
-   - Read through each generated question, choose an option (A, B, C, or D), and click **Submit Quiz**.
-5. **Review Results & Explanations:**
-   - View your total percentage score, correct answer count, and question-by-question review with source-backed explanations.
-6. **Track History & Analytics:**
-   - Navigate to **Quiz History** (`/history`) to see previous attempts.
-   - Navigate to **Performance Dashboard** (`/dashboard`) to view overall statistics, score trends, and individual attempt performance.
+1. Open the application.
+2. Upload your study notes in `.docx` format.
+3. Select the desired question count: 5, 10, or 15.
+4. Generate your quiz.
+5. Attempt the multiple-choice questions.
+6. Submit your answers to view your score and explanations.
+7. Visit the History and Dashboard pages to review previous attempts and performance.
 
 ---
 
-## Supported File Format & Limitations
+## 📁 Project Structure
 
-- **Supported Format:** Microsoft Word documents (`.docx`) only. Files must contain text notes and headings.
-- **Question Length:** 5, 10, or 15 questions per session.
-- **Model Requirement:** Local inference relies on Ollama running `llama3.2`.
+```text
+Quizify-AI/
+│
+├── app.py
+├── ai_provider.py
+├── requirements.txt
+├── requirements-render.txt
+│
+├── document_processing/
+│   ├── docx_reader.py
+│   ├── cleaner.py
+│   ├── chunker.py
+│   ├── structure_builder.py
+│   ├── structure_detector.py
+│   ├── embedding_generator.py
+│   ├── retriever.py
+│   └── vector_store.py
+│
+├── quiz_generation/
+│   ├── question_generator.py
+│   ├── quiz_schema.py
+│   ├── quiz_service.py
+│   ├── quiz_validator.py
+│   └── ai_provider.py
+│
+├── quiz_scoring/
+│   ├── answer_checker.py
+│   ├── score_calculator.py
+│   └── scoring_service.py
+│
+├── database/
+│   └── db_manager.py
+│
+├── templates/
+│   ├── index.html
+│   ├── quiz.html
+│   ├── result.html
+│   ├── dashboard.html
+│   └── history.html
+│
+├── static/
+│   └── style.css
+│
+├── docs/
+│   └── screenshots/
+│       ├── homepage.png
+│       ├── quiz.png
+│       ├── result.png
+│       └── dashboard.png
+│
+└── README.md
+```
+
+---
+
+## ⚠️ Current Limitations
+
+- Currently supports Microsoft Word `.docx` documents only.
+- Quiz generation quality depends on the selected AI model and source document quality.
+- The hosted free-tier deployment may take some time to respond after inactivity.
+- The deployed SQLite database and uploaded files use the hosting environment's filesystem; data may not persist across certain redeployments or instance replacements.
+
+---
+
+## 🔮 Future Improvements
+
+- PDF document support.
+- Additional AI model integrations.
+- Improved question difficulty classification.
+- More detailed learning analytics.
+- Persistent cloud database and file storage.
+- Exportable quizzes and results.
+
+---
+
+## 👩‍💻 Author
+
+**Akanksha Mangesh Deshmukh**
+
+Computer Engineering Student | Aspiring AI/ML Engineer
+
+- GitHub: [AkankshaD2](https://github.com/AkankshaD2)
+- Project: [Quizify-AI](https://github.com/AkankshaD2/Quizify-AI)
+- Live Demo: [Quizify-AI](https://quizify-ai-or8w.onrender.com)
+
+---
+
+\<p align="center">   \<strong>Built with Python, Flask, and AI.\</strong> \</p>
